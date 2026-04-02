@@ -1,0 +1,17 @@
+Acme RAG Demo Şirketi — Dahili Bilgi Tabanı
+
+Genel Bakış:
+Acme RAG Demo, Spring Boot ve Spring AI ile geliştirilmiş örnek bir uygulamadır.
+Destek kanalı: dahili Slack #rag-demo kanalıdır.
+
+Çalışma Saatleri:
+Pazartesi–Cuma 09:00–18:00 (GMT+3). Hafta sonu acil destek yoktur.
+
+İade Politikası:
+Yazılım lisansları iade edilemez. Donanım arızalarında 14 gün içinde değişim yapılır.
+
+Versiyon:
+Bilgi tabanı sürümü: 2025.03. Bu metin yalnızca RAG denemesi içindir.
+
+Sahibi:
+Ramazan Güner

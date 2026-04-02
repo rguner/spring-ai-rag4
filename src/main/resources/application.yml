@@ -1,0 +1,49 @@
+# llama.cpp yalnızca Ollama olmadan: iki ayrı llama-server süreci gerekir.
+#
+# 1) Sohbet ( --embeddings YOK ):
+#    ./llama-server -m ../models/Meta-Llama-3.1-8B-Instruct-Q6_K.gguf --port 8081
+#
+# 2) RAG gömme ( --embeddings + OAI için pooling none olmamalı; ayrı port ):
+#    ./llama-server -m <GGUF> --embeddings --pooling mean --port 8082
+#    (mean işemezse: --pooling last veya --pooling cls)
+#    Ortam değişkeni: LLAMA_ARG_POOLING=mean
+#    Pooling 'none' iken /v1/embeddings 400 döner (Spring bu ayarı API ile gönderemez).
+#
+# İkinci süreç için mümkünse küçük bir embedding modeli kullanın (RAM yarı yarıya).
+# İki kez aynı 8B modeli yüklemek bellekte iki kopya demektir.
+
+#./llama-server -m ../models/Meta-Llama-3.1-8B-Instruct-Q6_K.gguf --host 127.0.0.1 --port 8081
+#./llama-server -m ../models/Llama-3.2-1B-Instruct-BF16.gguf --embeddings --pooling mean --port 8082
+
+server:
+  port: 8080
+
+spring:
+  application:
+    name: spring-ai-rag
+  ai:
+    model:
+      chat: openai
+      embedding: openai
+    openai:
+      api-key: ${OPENAI_API_KEY:no-key}
+      # Sohbet sunucusu — path ekleme (sadece host:port)
+      base-url: ${LLAMA_CHAT_BASE_URL:http://127.0.0.1:8081}
+      chat:
+        options:
+          model: ${LLAMA_CHAT_MODEL:meta-llama-3.1-8b-instruct}
+      embedding:
+        # Gömme sunucusu — chat’ten farklı adres/port
+        base-url: ${LLAMA_EMBED_BASE_URL:http://127.0.0.1:8082}
+        options:
+          # İstek gövdesindeki model adı; llama-server çoğu zaman yüklenen GGUF ile yanıtlar
+          model: ${LLAMA_EMBEDDING_MODEL:Llama-3.2-1B-Instruct-BF16}
+
+app:
+  rag:
+    top-k: 4
+    similarity-threshold: 0.0
+
+logging:
+  level:
+    org.springframework.ai: INFO
