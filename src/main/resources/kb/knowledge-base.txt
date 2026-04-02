@@ -15,3 +15,6 @@ Bilgi tabanı sürümü: 2025.03. Bu metin yalnızca RAG denemesi içindir.
 
 Sahibi:
 Ramazan Güner
+
+Sahibi Nerede Doğdu?
+Ramazan Güner, Türkiye'nin Denizli şehrinde doğmuştur.
